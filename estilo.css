@@ -30,3 +30,16 @@ body {
     padding: 5px;
     font-size: 16px;
 }
+
+#pokedex {
+    margin-top: 20px;
+}
+
+.pokemon {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+}
