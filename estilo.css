@@ -6,6 +6,7 @@ body {
 #formulario {
     margin: 20px;
 }
+
 #txtPokemon {
     padding: 5px;
     font-size: 16px;
@@ -14,6 +15,56 @@ body {
 #btnConfirmar {
     padding: 10px 15px;
     font-size: 16px;
-    cursor: pointer;
+    cursor: pointer;
+    
 }
 
+#btnFavoritos {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    
+}
+
+
+#pokedex {
+    margin-top: 20px;
+}
+
+.pokemon {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+}
+
+.pokemon img {
+    width: 100px;
+    height: 100px;
+}
+
+.btnEliminar {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.btnFavorito {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: yellow;
+    border: none;
+    cursor: pointer;
+}
+
+.btnEliminar:hover {
+    background-color: #d32f2f;
+}
+
+.btnFavorito:hover {
+    background-color: yellowgreen;
+}
