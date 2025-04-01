@@ -6,4 +6,14 @@ body {
 #formulario {
     margin: 20px;
 }
+#txtPokemon {
+    padding: 5px;
+    font-size: 16px;
+}
+
+#btnConfirmar {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
 
