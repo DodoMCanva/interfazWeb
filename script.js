@@ -23,22 +23,24 @@ document.getElementById('btnConfirmar').onclick = function agregarPokemon() {
     }
 
     if (nuevoPokemon && !pokemones.includes(nuevoPokemon)) {
-        pokemones.push({nombre: nuevoPokemon, favorito: false});
-        pokemonInput.value = ''; 
-        obtenerPokemon(nuevoPokemon);  
+        pokemones.push({ nombre: nuevoPokemon, favorito: false });
+        pokemonInput.value = '';
+        obtenerPokemon(nuevoPokemon);
     } else if (pokemones.includes(nuevoPokemon)) {
         alert('Este Pokémon ya está en la lista');
     }
 };
 
 document.getElementById('btnFavoritos').onclick = function mostrar() {
-    
-    if(selfav){
+
+    if (selfav) {
         mostrarPokemones();
-        document.getElementById('btnFavoritos').innerHTML ="Favoritos";
-    }else{
+        document.getElementById('btnFavoritos').innerHTML = "Favoritos";
+        tituloLista.innerHTML = "Pokémon";
+    } else {
         mostrarPokemonesFavoritos();
-        document.getElementById('btnFavoritos').innerHTML ="Todos";
+        document.getElementById('btnFavoritos').innerHTML = "Todos";
+        tituloLista.innerHTML = "Pokémon Favorito";
     }
     selfav = !selfav;
 };
@@ -46,9 +48,9 @@ document.getElementById('btnFavoritos').onclick = function mostrar() {
 function mostrarPokemones() {
     const pokedexDiv = document.getElementById('pokedex');
     pokedexDiv.innerHTML = '';
-    for (let i = 0; i < pokemones.length; i++) {
-        const nombrePokemon = pokemones[i].nombre;
-        fetch(`https://pokeapi.co/api/v2/pokemon/${nombrePokemon.toLowerCase()}`)
+
+    pokemones.forEach((pokemon, i) => {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.nombre.toLowerCase()}`)
             .then(response => {
                 if (!response.ok) {
                     alert('Pokémon no encontrado');
@@ -59,30 +61,37 @@ function mostrarPokemones() {
             .then(datos => {
                 const bloque = document.createElement('div');
                 bloque.classList.add('pokemon');
-                
+
                 bloque.innerHTML = `
-                    <h3>${nombrePokemon.charAt(0).toUpperCase() + nombrePokemon.slice(1)}</h3>
-                    <img src="${datos.sprites.front_default}" alt="${nombrePokemon}">
+                    <h3>${pokemon.nombre.charAt(0).toUpperCase() + pokemon.nombre.slice(1)}</h3>
+                    <img src="${datos.sprites.front_default}" alt="${pokemon.nombre}">
                     <p>Altura: ${datos.height / 10} metros</p> 
                     <p>Peso: ${datos.weight / 10} kg</p>
                     <button class="btnEliminar">Eliminar</button>
-                    <button class="btnFavorito">${pokemones[i].favorito ? 'Quitar Favorito' : 'Favorito'}</button>
+                    <button class="btnFavorito ${pokemon.favorito ? 'favorito' : ''}">
+                        ${pokemon.favorito ? '★' : '☆'}
+                    </button>
                 `;
-                
+
                 pokedexDiv.appendChild(bloque);
 
+                // Boton eliminar
                 bloque.querySelector('.btnEliminar').addEventListener('click', () => {
                     pokemones.splice(i, 1);
-                    mostrarPokemones(); 
+                    mostrarPokemones();
                 });
 
-                bloque.querySelector('.btnFavorito').addEventListener('click', () => {
-                    pokemones[i].favorito = !pokemones[i].favorito;
-                    mostrarPokemones(); 
+                // Boton favorito
+                const btnFavorito = bloque.querySelector('.btnFavorito');
+                btnFavorito.addEventListener('click', () => {
+                    pokemon.favorito = !pokemon.favorito;
+                    btnFavorito.innerHTML = pokemon.favorito ? '★' : '☆';
+                    btnFavorito.classList.toggle('favorito');
                 });
-            })
-    }
+            });
+    });
 }
+
 function mostrarPokemonesFavoritos() {
     const pokedexDiv = document.getElementById('pokedex');
     pokedexDiv.innerHTML = '';
@@ -107,17 +116,21 @@ function mostrarPokemonesFavoritos() {
                         <p>Altura: ${datos.height / 10} metros</p> 
                         <p>Peso: ${datos.weight / 10} kg</p>
                         <button class="btnEliminar">Eliminar</button>
-                        <button class="btnFavorito">${pokemones[i].favorito ? 'Quitar Favorito' : 'Favorito'}</button>
+                        <button class="btnFavorito">${pokemones[i].favorito ? '★' : '☆'}</button>
                     `;
-                    
+
                     pokedexDiv.appendChild(bloque);
+
                     bloque.querySelector('.btnEliminar').addEventListener('click', () => {
-                        pokemones.splice(i, 1); 
-                        mostrarPokemonesFavoritos();  s
+                        pokemones.splice(i, 1);
+                        mostrarPokemonesFavoritos();
                     });
 
-                    bloque.querySelector('.btnFavorito').addEventListener('click', () => {
-                        pokemones[i].favorito = !pokemones[i].favorito;                          mostrarPokemonesFavoritos();  
+                    const btnFavorito = bloque.querySelector('.btnFavorito');
+                    btnFavorito.addEventListener('click', () => {
+                        pokemones[i].favorito = !pokemones[i].favorito;
+                        btnFavorito.innerHTML = pokemones[i].favorito ? '★' : '☆';
+                        mostrarPokemonesFavoritos();
                     });
                 })
                 .catch(error => console.error('Error al obtener los datos del Pokémon:', error));
